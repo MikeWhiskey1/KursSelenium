@@ -1,0 +1,16 @@
+*.pyc
+*.pyo
+env/
+.idea/
+tags
+
+/src/test/java/FillPersonForm.java
+/src/test/java/SearchTest.java
+/src/test/java/SearchWorldCupHome.java
+
+/target/test-classes/FillPersonForm.class
+/target/test-classes/SearchTest.class
+/target/test-classes/SearchWorldCupHome.class
+
+
+
