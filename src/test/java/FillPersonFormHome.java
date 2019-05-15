@@ -64,7 +64,11 @@ public class FillPersonFormHome {
             }
         }
 
-        driver.findElement(By.id("dob")).sendKeys("02/10/1995");
+
+        // added tab to move to next edit box (and close calendar)
+        driver.findElement(By.id("dob")).sendKeys("02/10/1995\t");
+        waitt(3000);
+
         driver.findElement(By.id("address")).sendKeys("Dobra 54");
         driver.findElement(By.id("email")).sendKeys("kowalski@gmail.com");
         driver.findElement(By.id("password")).sendKeys("33333");
@@ -103,8 +107,9 @@ public class FillPersonFormHome {
         for (String elementLocator : listOfIds) {
             elementLocator = elementLocator + "-error";
             assertEquals("This field is required.", driver.findElement(By.id(elementLocator)).getText());
-            counter++;waitt(2000);
+            counter++;
         }
+        waitt(2000);
 
         System.out.println(counter);
     }
@@ -121,7 +126,7 @@ public class FillPersonFormHome {
         // correct email
         email.sendKeys("kowalski@gmail.com\t");
         try {assertTrue(driver.findElement(By.id("email-error")).equals(null));}
-        catch (Exception e) {System.out.println("Upps. email-error occured although should not");}
+        catch (Exception e) {System.out.println("Upps. 'email-error' occurred although should not.");}
 
 
         // incorrect email - missing "@"
@@ -149,13 +154,6 @@ public class FillPersonFormHome {
         waitt(2000);
 
     }
-
-
-
-//    @Testpublic void checkCalendar
-
-
-
 
 
 
