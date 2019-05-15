@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class FillPersonFormHome {
 
@@ -31,7 +31,15 @@ public class FillPersonFormHome {
     }
 
 
+    // my function which includes delays after steps
+    private void waitt(int timee) {
+        try {Thread.sleep(timee);}
+        catch (InterruptedException ex) {Thread.currentThread().interrupt();}
+    }
 
+
+
+    // checks if form has been successfully submitted -> "Successfully submitted!"
     @Test
     public void fillPersonForm() {
 
@@ -41,19 +49,20 @@ public class FillPersonFormHome {
         driver.findElement(By.id("last-name")).sendKeys("kowalski");
         List<WebElement> elements = driver.findElements(By.cssSelector(".radio-inline"));
 
+//        // each for
 //        for (WebElement element : elements) {
 //            if (element.getText().equals("Female")) {
 //                element.click();
 //                break;
-//            } // end if
-//        } // end for
+//            }
+//        }
 
         for (int i = 0; i < elements.size(); i++) {
             if (elements.get(i).getText().equals("Female")) {
                 elements.get(i).click();
                 break;
-            } // enf if
-        } // enf for
+            }
+        }
 
         driver.findElement(By.id("dob")).sendKeys("02/10/1995");
         driver.findElement(By.id("address")).sendKeys("Dobra 54");
@@ -69,14 +78,16 @@ public class FillPersonFormHome {
 
         driver.findElement(By.xpath("//label[text() = 'Read books']")).click();
 
-        driver.findElement(By.id("comment")).sendKeys(("To jest mój już nie pierwszy skrypt testowy"));
+        driver.findElement(By.id("comment")).sendKeys(("This is my script"));
         driver.findElement(By.id("submit")).click();
 
         assertEquals("Successfully submitted!", driver.findElement(By.id("submit-msg")).getText());
 
-    } // end fillPersonForm Test
+    }
 
 
+
+    // checks if mandatory fields have been filled -> "This field is required."
     @Test
     public void checkErrors() {
         driver.get("https://katalon-test.s3.amazonaws.com/demo-aut/dist/html/form.html");
@@ -84,27 +95,81 @@ public class FillPersonFormHome {
 
 //        List<String> listOfIds = getListOfIds();
 
-        List<String> listOfIds = Arrays.asList("first-name", "last-name", "gender");
+        // Added to List missing Ids of mandatory fields
+        List<String> listOfIds = Arrays.asList("first-name", "last-name", "gender", "dob", "address",
+                "email", "password", "company");
         int counter = 0;
 
         for (String elementLocator : listOfIds) {
             elementLocator = elementLocator + "-error";
             assertEquals("This field is required.", driver.findElement(By.id(elementLocator)).getText());
-            counter++;
+            counter++;waitt(2000);
         }
+
         System.out.println(counter);
     }
 
 
+    // checks if email entry is valid -> "Please enter a valid email address."
+    @Test
+    public void checkEmail() {
+
+        driver.get("https://katalon-test.s3.amazonaws.com/demo-aut/dist/html/form.html");
+
+        WebElement email = driver.findElement(By.id("email"));
+
+        // correct email
+        email.sendKeys("kowalski@gmail.com\t");
+        try {assertTrue(driver.findElement(By.id("email-error")).equals(null));}
+        catch (Exception e) {System.out.println("Upps. email-error occured although should not");}
+
+
+        // incorrect email - missing "@"
+        waitt(2000);
+        email.clear();
+        email.sendKeys("kowalskigmail.com\t");
+        try {assertEquals("Please enter a valid email address.", driver.findElement(By.id("email-error")).getText());}
+        catch (Exception e) {System.out.println("Id not found");}
+
+
+        // incorrect email - missing characters after "@"
+        waitt(2000);
+        email.clear();
+        email.sendKeys("kowalski@\t");
+        try {assertEquals("Please enter a valid email address.", driver.findElement(By.id("email-error")).getText());}
+        catch (Exception e) {System.out.println("Id not found");}
+
+
+        // incorrect email - missing characters before "@"
+        waitt(2000);
+        email.clear();
+        email.sendKeys("@gmail.com\t");
+        try {assertEquals("Please enter a valid email address.", driver.findElement(By.id("email-error")).getText());}
+        catch (Exception e) {System.out.println("Id not found");}
+        waitt(2000);
+
+    }
+
+
+
+//    @Testpublic void checkCalendar
+
+
+
+
+
+
+
+//    // alternatively used in checkErrors()
 //    private List<String> getListOfIds() {
 //        List<String> listId = new ArrayList<>();
 //        listId.add("first-name");
 //        listId.add("last-name");
 //        listId.add("gender");
 //        return listId;
-//    } // end checkErrors Test
+//    }
 
 
-} // end class FillPersonForm
+}
 
 
