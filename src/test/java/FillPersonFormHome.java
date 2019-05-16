@@ -25,6 +25,8 @@ public class FillPersonFormHome {
 
     }
 
+    //cokolwiek
+
     @After
     public void tearDown() {
         driver.quit();
@@ -65,7 +67,7 @@ public class FillPersonFormHome {
         }
 
 
-        // added tab to move to next edit box (and close calendar)
+        // added \t (tab) to move to next edit box (and close calendar)
         driver.findElement(By.id("dob")).sendKeys("02/10/1995\t");
         waitt(3000);
 
