@@ -25,11 +25,18 @@ public class FillPersonFormHome {
 
     }
 
-    //cokolwiek
 
     @After
     public void tearDown() {
         driver.quit();
+    }
+
+    // extention to Exercise 11
+    private void workWithWebElement(WebElement webElement, String name, String inputValue) {
+        if (webElement.isDisplayed()) {
+            webElement.sendKeys(inputValue);
+            System.out.println(name + ": " + inputValue);
+        }
     }
 
 
@@ -40,15 +47,30 @@ public class FillPersonFormHome {
     }
 
 
-
     // checks if form has been successfully submitted -> "Successfully submitted!"
     @Test
     public void fillPersonForm() {
 
         driver.get("https://katalon-test.s3.amazonaws.com/demo-aut/dist/html/form.html");
 
-        driver.findElement(By.id("first-name")).sendKeys("Karol");
-        driver.findElement(By.id("last-name")).sendKeys("kowalski");
+//        driver.findElement(By.id("first-name")).sendKeys("Karol");
+
+        WebElement element = driver.findElement(By.id("first-name"));
+        String name = element.getAttribute("name");
+        String inputValue = "Karol";
+
+        workWithWebElement(element, name, inputValue);
+
+
+//        driver.findElement(By.id("last-name")).sendKeys("kowalski");
+
+        element = driver.findElement(By.id("last-name"));
+        name = element.getAttribute("name");
+        inputValue = "Kowalski";
+
+        workWithWebElement(element, name, inputValue);
+
+
         List<WebElement> elements = driver.findElements(By.cssSelector(".radio-inline"));
 
 //        // each for
@@ -68,24 +90,72 @@ public class FillPersonFormHome {
 
 
         // added \t (tab) to move to next edit box (and close calendar)
-        driver.findElement(By.id("dob")).sendKeys("02/10/1995\t");
+//        driver.findElement(By.id("dob")).sendKeys("02/10/1995\t");
+
+        element = driver.findElement(By.id("dob"));
+        name = element.getAttribute("name");
+        inputValue = "02/10/1995\t";
+
+        workWithWebElement(element, name, inputValue);
         waitt(3000);
 
-        driver.findElement(By.id("address")).sendKeys("Dobra 54");
-        driver.findElement(By.id("email")).sendKeys("kowalski@gmail.com");
-        driver.findElement(By.id("password")).sendKeys("33333");
-        driver.findElement(By.id("company")).sendKeys("Coders Lab");
+//        driver.findElement(By.id("address")).sendKeys("Dobra 54");
+        element = driver.findElement(By.id("address"));
+        name = element.getAttribute("name");
+        inputValue = "Dobra 54";
+
+        workWithWebElement(element, name, inputValue);
+
+
+//        driver.findElement(By.id("email")).sendKeys("kowalski@gmail.com");
+
+        element = driver.findElement(By.id("email"));
+        name = element.getAttribute("name");
+        inputValue = "kowalski@gmail.com";
+
+        workWithWebElement(element, name, inputValue);
+
+
+//        driver.findElement(By.id("password")).sendKeys("33333");
+
+        element = driver.findElement(By.id("password"));
+        name = element.getAttribute("name");
+        inputValue = "33333";
+
+        workWithWebElement(element, name, inputValue);
+
+
+//        driver.findElement(By.id("company")).sendKeys("Coders Lab");
+
+        element = driver.findElement(By.id("company"));
+        name = element.getAttribute("name");
+        inputValue = "Coders Lab";
+
+        workWithWebElement(element, name, inputValue);
+
 
         Select roleDropDown = new Select(driver.findElement(By.name("role")));
         roleDropDown.selectByVisibleText("Manager");
 
+
         Select jobDropdown = new Select(driver.findElement(By.name("expectation")));
         jobDropdown.selectByVisibleText("Good teamwork");
 
+
         driver.findElement(By.xpath("//label[text() = 'Read books']")).click();
 
-        driver.findElement(By.id("comment")).sendKeys(("This is my script"));
+
+//        driver.findElement(By.id("comment")).sendKeys(("This is my script"));
+
+        element = driver.findElement(By.id("comment"));
+        name = element.getAttribute("name");
+        inputValue = "This is my script";
+
+        workWithWebElement(element, name, inputValue);
+
+
         driver.findElement(By.id("submit")).click();
+
 
         assertEquals("Successfully submitted!", driver.findElement(By.id("submit-msg")).getText());
 
