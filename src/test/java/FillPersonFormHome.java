@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class FillPersonFormHome {
 
     @Before
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "/home/miki/chromedriver_linux64/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/users/adrianlachowski/chromedriver");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
 
@@ -42,9 +41,15 @@ public class FillPersonFormHome {
 
     // my function which includes delays after steps
     private void waitt(int timee) {
-        try {Thread.sleep(timee);}
-        catch (InterruptedException ex) {Thread.currentThread().interrupt();}
+        try {
+            Thread.sleep(timee);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
     }
+    //TA FUNKCJA NIE MA PRAWA ISTNIEĆ, PO PIERWSZE ROBISZ Thread.sleep, co jest niedpuszczalne, mówiłem o tym na początku,
+    // po drugie - nie ma potrzeby czekać w testach w tych konkretnych przypadkach
+    //po trzecie - metody pomocnicze umieszczamy na końcu klasy, po etodach testowych
 
 
     // checks if form has been successfully submitted -> "Successfully submitted!"
@@ -93,6 +98,8 @@ public class FillPersonFormHome {
 //        driver.findElement(By.id("dob")).sendKeys("02/10/1995\t");
 
         element = driver.findElement(By.id("dob"));
+        // nie jest dobrym pomysłem, żeby przypisywać wiele razy coś do zmiennej element, tracisz w ten sposób referencje do poprzednich
+        //webelelementów
         name = element.getAttribute("name");
         inputValue = "02/10/1995\t";
 
@@ -101,6 +108,8 @@ public class FillPersonFormHome {
 
 //        driver.findElement(By.id("address")).sendKeys("Dobra 54");
         element = driver.findElement(By.id("address"));
+        // nie jest dobrym pomysłem, żeby przypisywać wiele razy coś do zmiennej element, tracisz w ten sposób referencje do poprzednich
+        //webelelementów
         name = element.getAttribute("name");
         inputValue = "Dobra 54";
 
@@ -110,6 +119,8 @@ public class FillPersonFormHome {
 //        driver.findElement(By.id("email")).sendKeys("kowalski@gmail.com");
 
         element = driver.findElement(By.id("email"));
+        // nie jest dobrym pomysłem, żeby przypisywać wiele razy coś do zmiennej element, tracisz w ten sposób referencje do poprzednich
+        //webelelementów
         name = element.getAttribute("name");
         inputValue = "kowalski@gmail.com";
 
@@ -119,6 +130,8 @@ public class FillPersonFormHome {
 //        driver.findElement(By.id("password")).sendKeys("33333");
 
         element = driver.findElement(By.id("password"));
+        // nie jest dobrym pomysłem, żeby przypisywać wiele razy coś do zmiennej element, tracisz w ten sposób referencje do poprzednich
+        //webelelementów
         name = element.getAttribute("name");
         inputValue = "33333";
 
@@ -128,6 +141,8 @@ public class FillPersonFormHome {
 //        driver.findElement(By.id("company")).sendKeys("Coders Lab");
 
         element = driver.findElement(By.id("company"));
+        // nie jest dobrym pomysłem, żeby przypisywać wiele razy coś do zmiennej element, tracisz w ten sposób referencje do poprzednich
+        //webelelementów
         name = element.getAttribute("name");
         inputValue = "Coders Lab";
 
@@ -148,6 +163,8 @@ public class FillPersonFormHome {
 //        driver.findElement(By.id("comment")).sendKeys(("This is my script"));
 
         element = driver.findElement(By.id("comment"));
+        // nie jest dobrym pomysłem, żeby przypisywać wiele razy coś do zmiennej element, tracisz w ten sposób referencje do poprzednich
+        //webelelementów
         name = element.getAttribute("name");
         inputValue = "This is my script";
 
@@ -197,37 +214,50 @@ public class FillPersonFormHome {
 
         // correct email
         email.sendKeys("kowalski@gmail.com\t");
-        try {assertTrue(driver.findElement(By.id("email-error")).equals(null));}
-        catch (Exception e) {System.out.println("Upps. 'email-error' occurred although should not.");}
+        // nie używaj \t
+        try {
+            assertTrue(driver.findElement(By.id("email-error")).equals(null));
+            // ta asercja jest zła, powinno być coś w stylu:
+            // assertFalse(driver.findElement(By.id("email-error")).isDisplayed());
+        } catch (Exception e) {
+            System.out.println("Upps. 'email-error' occurred although should not.");
+        }
 
 
         // incorrect email - missing "@"
         waitt(2000);
         email.clear();
         email.sendKeys("kowalskigmail.com\t");
-        try {assertEquals("Please enter a valid email address.", driver.findElement(By.id("email-error")).getText());}
-        catch (Exception e) {System.out.println("Id not found");}
+        try {
+            assertEquals("Please enter a valid email address.", driver.findElement(By.id("email-error")).getText());
+        } catch (Exception e) {
+            System.out.println("Id not found");
+        }
 
 
         // incorrect email - missing characters after "@"
         waitt(2000);
         email.clear();
         email.sendKeys("kowalski@\t");
-        try {assertEquals("Please enter a valid email address.", driver.findElement(By.id("email-error")).getText());}
-        catch (Exception e) {System.out.println("Id not found");}
+        try {
+            assertEquals("Please enter a valid email address.", driver.findElement(By.id("email-error")).getText());
+        } catch (Exception e) {
+            System.out.println("Id not found");
+        }
 
 
         // incorrect email - missing characters before "@"
         waitt(2000);
         email.clear();
         email.sendKeys("@gmail.com\t");
-        try {assertEquals("Please enter a valid email address.", driver.findElement(By.id("email-error")).getText());}
-        catch (Exception e) {System.out.println("Id not found");}
+        try {
+            assertEquals("Please enter a valid email address.", driver.findElement(By.id("email-error")).getText());
+        } catch (Exception e) {
+            System.out.println("Id not found");
+        }
         waitt(2000);
 
     }
-
-
 
 
 //    // alternatively used in checkErrors()
@@ -241,5 +271,4 @@ public class FillPersonFormHome {
 
 
 }
-
 
